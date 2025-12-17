@@ -127,7 +127,7 @@ async function run() {
   }
 });
 
-// Latest 6 data 
+// Latest 6 data  here
 app.get('/latest-artworks', async(req, res) =>{
   const result = await artworkCollection.find().sort({ _id: -1 }).limit(6).toArray();
  console.log(result);
