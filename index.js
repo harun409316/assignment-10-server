@@ -1,10 +1,11 @@
+
 const express = require('express')
 const cors = require('cors')  
 const app = express()
 const port = 5000
 
-app.use(cors())  // Use CORS middleware
-app.use(express.json())  // Middleware to parse JSON bodies
+app.use(cors())  
+app.use(express.json())  
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
