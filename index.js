@@ -6,11 +6,10 @@ const port = 5000
 
 app.use(cors())  
 app.use(express.json())  
-
+require('dotenv').config();
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const uri = "mongodb+srv://assignment-10-db:S7jMfv8CejDQaJfo@cluster0.5asayq5.mongodb.net/?appName=Cluster0";
-
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5asayq5.mongodb.net/?appName=Cluster0`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -30,23 +29,24 @@ async function run() {
     const artworkCollection = db.collection('artwork')
     const favoritesCollection = db.collection('my-favorites')
    
-   app.get('/artworks', async (req, res) => {
-  try {
-    const search = req.query.search || '';
+ app.get('/artworks', async (req, res) => {
+  const { search = '', artistName } = req.query;
 
-    const query = {
-      // status: 'public',
-      $or: [
-        { title: { $regex: search, $options: 'i' } },
-        { artistName: { $regex: search, $options: 'i' } }
-      ]
-    };
+  let query = {};
 
-    const result = await artworkCollection.find(query).toArray();
-    res.send(result);
-  } catch (error) {
-    res.status(500).send({ error: error.message });
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { artistName: { $regex: search, $options: 'i' } },
+    ];
   }
+
+  if (artistName) {
+    query.artistName = artistName;
+  }
+
+  const result = await artworkCollection.find(query).toArray();
+  res.send(result);
 });
 
 
@@ -62,16 +62,7 @@ async function run() {
       })
     })
 
-     app.get("/artworks", async (req, res) => {
-      const { artistName } = req.query;
-
-      const result = await artworkCollection
-        .find({ artistName: artistName })
-        .toArray();
-
-      res.send({ success: true, result });
-    });
-
+   
 
     app.post("/artwork", async (req, res) => {
       const formdata = req.body;
