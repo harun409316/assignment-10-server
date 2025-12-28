@@ -2,7 +2,7 @@
 const express = require('express')
 const cors = require('cors')  
 const app = express()
-const port = 5000
+// const port = 5000
 
 app.use(cors())  
 app.use(express.json())  
@@ -23,7 +23,7 @@ async function run() {
   try {
   
     // Connect the client to the server	(optional starting in v4.7)
-     await client.connect();
+    //  await client.connect();
 
    const db = client.db('assign-10-db')
     const artworkCollection = db.collection('artwork')
@@ -197,7 +197,7 @@ console.log(query);
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(" You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -211,6 +211,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!How are you?')
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`)
+// })
+module.exports = app;
